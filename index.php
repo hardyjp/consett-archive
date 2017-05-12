@@ -22,8 +22,10 @@
 </head>
 <body>
     
-<h1>Welcome to the Consett AFC Archive</h1>
-
+<div class="container">
+    <h1>Welcome to the Consett AFC Archive</h1>
+</div>
+    
 <?php
   $paper = array("Copier", "Inkjet", "Laser", "Photo");
   $j = 0;
