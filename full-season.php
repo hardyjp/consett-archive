@@ -25,14 +25,16 @@
 <body>
     
 <div class="container">
-    <h1>Welcome to the Consett AFC Archive</h1>
+    <h1>
+    <?php echo $_GET['season']; ?>
+    </h1>
     
 <?php
   require_once 'login.php';
   $conn = new mysqli($hn, $un, $pw, $db);
   if ($conn->connect_error) die($conn->connect_error);
 
-  $query  = "SELECT DISTINCT Season FROM results_archive";
+  $query  = "SELECT Date, Opponents, Competition, HA, Score, ID, ReportURL FROM results_archive WHERE Season='" . $_GET['season'] . "' ORDER BY ID";
   $result = $conn->query($query);
   if (!$result) die($conn->error);
 
@@ -41,8 +43,12 @@
     <table class="table">
     <thead>
       <tr>
-        <th>Season</th>
-        <th>Division</th>
+        <th>Date</th>
+        <th>Opponents</th>
+        <th>Competition</th>
+        <th></th>
+        <th>Score</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -51,8 +57,12 @@
   {
     $result->data_seek($j);
 	$row = $result->fetch_array(MYSQLI_ASSOC);
+    $reportUrl = "match-report.php?id=" . $row['ID'];
+    if ($row['ReportURL'] != ""){
+        $reportUrl = $row['ReportURL'];
+    }
     print "<tr>
-        <td><a href='full-season.php?season=" . $row['Season'] . "'>" . $row['Season'] . "</a></td><td>Northern League</td>
+        <td>" . $row['Date'] . "</td><td>" . $row['Opponents'] . "</td><td>" . $row['Competition'] . "</td><td>" . $row['HA'] . "</td><td>" . $row['Score'] . "</td><td><a href='" . $reportUrl . "'>Details</a></td>
         </tr>";
   }
 
